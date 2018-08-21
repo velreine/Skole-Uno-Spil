@@ -11,14 +11,15 @@ namespace Uno_Spil
         public string Name { get; set; }
 
         public List<Card> PlayerHand { get; }
+        public int Score { get; set; }
+        public bool HasCardsLeft => PlayerHand.Count > 0;
 
-        // TODO: ADD list of cards.
-        // TODO: ADD score system.
 
         public Player(string name)
         {
             this.Name = name;
             this.PlayerHand = new List<Card>();
+            this.Score = 0;
         }
 
     }
