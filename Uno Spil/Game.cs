@@ -271,7 +271,7 @@ namespace Uno_Spil
 
 
 
-                //TODO:: Need to do the draw 4 cards parts.
+             
                 //If Joker card player can set the color...:
                 if (player.PlayerHand[choice].Special == Card.CardSpecial.JOKER_CHOOSE_COLOR ||
                     player.PlayerHand[choice].Special == Card.CardSpecial.JOKER_CHOOSE_COLOR_AND_DRAW_4_CARDS)
@@ -280,27 +280,29 @@ namespace Uno_Spil
                     Console.WriteLine("R = RØD, G = GRØN, B = BLÅ, Y = GUL: ");
                     string input = Console.ReadLine();
 
-                    switch (input)
-                    {
-                        case "R":
-                            player.PlayerHand[choice].Color = Card.CardColor.RED;
-                            currentColorOfDeck = Card.CardColor.RED;
-                            break;
-                        case "G":
-                            player.PlayerHand[choice].Color = Card.CardColor.GREEN;
-                            currentColorOfDeck = Card.CardColor.GREEN;
-                            break;
-                        case "B":
-                            player.PlayerHand[choice].Color = Card.CardColor.BLUE;
-                            currentColorOfDeck = Card.CardColor.BLUE;
-                            break;
-                        case "Y":
-                            player.PlayerHand[choice].Color = Card.CardColor.YELLOW;
-                            currentColorOfDeck = Card.CardColor.YELLOW;
-                            break;
-                        default:
-                            break;
-                    }
+                    if (input != null)
+                        switch (input.ToLower())
+                        {
+                            case "r":
+                                player.PlayerHand[choice].Color = Card.CardColor.RED;
+                                currentColorOfDeck = Card.CardColor.RED;
+                                break;
+                            case "g":
+                                player.PlayerHand[choice].Color = Card.CardColor.GREEN;
+                                currentColorOfDeck = Card.CardColor.GREEN;
+                                break;
+                            case "b":
+                                player.PlayerHand[choice].Color = Card.CardColor.BLUE;
+                                currentColorOfDeck = Card.CardColor.BLUE;
+                                break;
+                            case "y":
+                                player.PlayerHand[choice].Color = Card.CardColor.YELLOW;
+                                currentColorOfDeck = Card.CardColor.YELLOW;
+                                break;
+                            default:
+                                //TODO: Can't handle bad color joker input yet.
+                                break;
+                        }
                 }
                 
                 // Handle special effects:: (TAKE TWO & JOKER 4 CARDS).
@@ -401,7 +403,7 @@ namespace Uno_Spil
         {
             Console.WriteLine($"Den aktive spiller er: {player.Name} med scoren: {player.Score}");
 
-            Console.WriteLine($"Spillerens hånd: ");
+            Console.WriteLine("Spillerens hånd: ");
 
             int cardIndex = -1;
 

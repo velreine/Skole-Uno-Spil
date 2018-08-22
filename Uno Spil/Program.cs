@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+
 
 namespace Uno_Spil
 {
@@ -15,7 +11,7 @@ namespace Uno_Spil
 
 
 
-            string[] players = new[] { "Nicky", "Per"/*, "Mikkel", "Martin"*/};
+            string[] players = { "Nicky", "Per"/*, "Mikkel", "Martin"*/};
 
             var myGame = new Game(players.Length, players);
 
@@ -46,7 +42,7 @@ namespace Uno_Spil
                 if (currentPlayer.HasCardsLeft)
                 {
 
-                    bool cardHasBeenPutDown = false;
+                    bool cardHasBeenPutDown;
 
                     do
                     {
@@ -58,7 +54,7 @@ namespace Uno_Spil
                         {
                             currentPlayer.PlayerHand.Add(myGame.DrawCardFromMainStack());
                             Console.WriteLine($"Du trak et kort: {currentPlayer.PlayerHand.Last()}");
-                            Console.Write($"Vil du forsøge at ligge dette kort ned (J/N): ");
+                            Console.Write("Vil du forsøge at ligge dette kort ned (J/N): ");
                             var input = Console.ReadLine();
 
                             if (input == "J")
