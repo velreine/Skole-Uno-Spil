@@ -88,7 +88,7 @@ namespace Uno_Spil
 
         }
 
-        public void TakeNextTurn()
+        public void AdvanceToNextPlayer()
         {
             // Check for Winner before taking a turn:::
 
@@ -112,6 +112,28 @@ namespace Uno_Spil
             }
         }
 
+        public Player GetNextPlayer()
+        {
+            
+            int tempActivePlayerID = ActivePlayerID;
+
+            if (this._direction == GameDirection.DIRECTION_FORWARDS)
+            {
+                tempActivePlayerID++;
+
+                if(tempActivePlayerID > (AmountOfPlayers -1)) tempActivePlayerID = 0;
+            }
+
+            if (this._direction == GameDirection.DIRECTION_BACKWARDS)
+            {
+                tempActivePlayerID--;
+
+                if (tempActivePlayerID < 0) tempActivePlayerID = (AmountOfPlayers - 1);
+            }
+
+
+            return Players[tempActivePlayerID];
+        }
 
         public Player GetPlayerAtID(int id)
         {
@@ -237,15 +259,9 @@ namespace Uno_Spil
         {
             // Peek top card from off stack:
             Card peeked = null;
-
             if (_offStack.Count > 0) peeked = _offStack.Peek();
-
-
-
-
-
-
-            // Validate correct index was given:
+            
+            // Validate correct card index was given:
             if ((player.PlayerHand.Count > 0 && (player.PlayerHand.Count - 1) >= choice) && choice >= 0)
             {
 
@@ -286,15 +302,24 @@ namespace Uno_Spil
                             break;
                     }
                 }
+                
+                // Handle special effects:: (TAKE TWO & JOKER 4 CARDS).
+                if (player.PlayerHand[choice].Special == Card.CardSpecial.JOKER_CHOOSE_COLOR_AND_DRAW_4_CARDS)
+                {
+                    Player next = GetNextPlayer();
+                    for (int i = 0; i < 4; i++)
+                    {
+                        next.PlayerHand.Add(DrawCardFromMainStack());
+                    }
+                }
 
-
-
-
-
-
-
-
-
+                if (player.PlayerHand[choice].Special == Card.CardSpecial.TAKE_TWO)
+                {
+                    Player next = GetNextPlayer();
+                    next.PlayerHand.Add((DrawCardFromMainStack()));
+                    next.PlayerHand.Add((DrawCardFromMainStack()));
+                }
+                
                 if (peeked != null)
                 {
                     if (player.PlayerHand[choice].Value == PeekOffStack().Value || player.PlayerHand[choice].Color == currentColorOfDeck || (player.PlayerHand[choice].Special == PeekOffStack().Special && player.PlayerHand[choice].Special != Card.CardSpecial.NORMAL))
@@ -313,8 +338,8 @@ namespace Uno_Spil
                     return true;
                 }
             }
+            
             // If a valid input was not chosen output error messages.
-
             Console.WriteLine("Du har valgt et forkert index eller et ugyldigt kort.");
             Console.WriteLine("Kortet skal have samme farve, værdi eller symbol");
 
@@ -346,7 +371,7 @@ namespace Uno_Spil
             currentPlayer.Score += playerScore;
         }
 
-        private bool CheckForWinner()
+        public bool CheckForWinner()
         {
             if (Players != null)
             {
